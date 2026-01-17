@@ -56,14 +56,3 @@ docker-compose up -d --build
 ### 3. Automatic Seeding
 
 The application automatically seeds the database with over **25 Nigerian hospitals** and **25 ambulances** on the first startup if no data is found. No manual seeding is required!
-
----
-
-## 📚 Learning Log: Standardizing Geo-Spatial Logic & API Architecture
-
-### The Challenge
-The most significant technical hurdle was architecting a **Unified Response Envelope** that could seamlessly handle diverse data types—from simple entity updates to complex PostGIS spatial results—while maintaining strict schema consistency for both successful requests and multi-layer exceptions (like `class-validator` arrays).
-
-### Research & Debugging
-
-I encountered an issue where manual error handling in services would skip the global success interceptor, leading to inconsistent response shapes. Researching the NestJS request lifecycle revealed that a combination of a global Interceptor for `2xx` and a custom Exception Filter for `4xx/5xx` was the only way to guarantee a 100% consistent API contract.
