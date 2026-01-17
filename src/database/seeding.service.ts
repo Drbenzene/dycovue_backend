@@ -15,7 +15,6 @@ export class SeedingService implements OnApplicationBootstrap {
         try {
             this.logger.log('🧐 Checking if database needs seeding...');
 
-            // Ensure PostGIS extension exists
             await this.dataSource.query('CREATE EXTENSION IF NOT EXISTS postgis');
 
             const hospitalCount = await this.dataSource.getRepository(Hospital).count();
