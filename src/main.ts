@@ -31,9 +31,9 @@ async function bootstrap() {
 
   // Swagger configuration
   const config = new DocumentBuilder()
-    .setTitle('GIS Hospital Dashboard API')
+    .setTitle('DycovueAPI')
     .setDescription(
-      'API for managing hospitals, ambulances, and calculating proximity using PostGIS spatial queries',
+      'API for managing hospitals, ambulances, proximity using PostGIS spatial queries',
     )
     .setVersion('1.0')
     .addTag('hospitals', 'Hospital management endpoints')
