@@ -1,4 +1,4 @@
-# GIS-Integrated Hospital Dashboard - Backend
+# Dycovue
 
 Built with PostGIS for geographical precision and Redis for low-latency response times.
 
