@@ -1,0 +1,72 @@
+services:
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: gis-hospital-db
+    environment:
+      POSTGRES_DB: hospital_dashboard
+      POSTGRES_USER: hospital_user
+      POSTGRES_PASSWORD: hospital_pass
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U hospital_user -d hospital_dashboard']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hospital-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: gis-hospital-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hospital-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: gis-hospital-app
+    environment:
+      NODE_ENV: development
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: hospital_user
+      DB_PASSWORD: hospital_pass
+      DB_DATABASE: hospital_dashboard
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - hospital-network
+    command: npm run start:dev
+
+networks:
+  hospital-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+
